@@ -1,0 +1,1 @@
+<view class="content data-v-7eddcc88"><image class="backimg data-v-7eddcc88" src="/static/yuantu.png" alt></image><view class="btnbox data-v-7eddcc88"><button class="btn data-v-7eddcc88" hover-class="btnActive" data-event-opts="{{[['tap',[['goto_login',['$event']]]]]}}" bindtap="__e">快去登陆吧</button></view></view>
