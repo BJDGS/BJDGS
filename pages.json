@@ -12,7 +12,10 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "index"
+				"navigationBarTitleText": "您的行动轨迹热力图"
+        // "navigationBarBackgroundColor": "#fff",
+        // "navigationBarTextStyle": "white",
+        // "navigationStyle": "custom"
 			}
 		}
 	],

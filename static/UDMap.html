@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="keywords" content="天地图"/>
+    <title></title>
+    <script src="http://api.tianditu.gov.cn/api?v=4.0&tk=db4015caba857fb9f82d5a74700e2224" type="text/javascript"></script>
+    <style type="text/css">
+        body, html {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            font-family: "微软雅黑";
+        }
+        #mapDiv {
+            height: 90%;
+            width: 100%;
+        }
+        .btn {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        input {
+          background-color: #5191cc;
+          color: #fff;
+          padding: 10px 30px;
+          border-radius: 15px;
+          box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+          border: none;
+          margin-top: 20px;
+          font-size: 14px;
+        }
+        input:last-child {
+          margin-left: 20px;
+        }
+        input:active {
+          color: #fff;
+          background-color: #3571cc;
+        }
+    </style>
+    <script type="text/javascript"
+            src="http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/HeatmapOverlay.js"></script>
+    <script>
+        var data = [
+            {name: '上海', value: 150},
+            {name: '厦门', value: 200},
+            {name: '潮州', value: 150},
+            {name: '汕头', value: 100},
+            {name: '东莞', value: 50},
+            {name: '惠州', value: 50},
+            {name: '广州', value: 200},
+            {name: '中山', value: 50},
+            {name: '深圳', value: 250},
+            {name: '珠海', value: 50},
+            {name: '苏州', value: 50},
+            {name: '南昌', value: 50},
+            {name: '成都', value: 200},
+            {name: '桂林', value: 200},
+            {name: '阳朔', value: 120},
+            {name: '龙胜', value: 100},
+            {name: '张家界', value: 200},
+            {name: '重庆', value: 200},
+            {name: '杭州', value: 50},
+            {name: '常德', value: 150},
+            {name: '岳阳', value: 150},
+            {name: '长沙', value: 200},
+            {name: '武汉', value: 150},
+            {name: '益阳', value: 250},
+            {name: '南京', value: 200},
+        ];
+        
+        var geoCoordMap = {
+            '上海': [121.48, 31.22],
+            '厦门': [118.1, 24.46],
+            '潮州': [116.63, 23.68],
+            '汕头': [116.69, 23.39],
+            '东莞': [113.75, 23.04],
+            '惠州': [114.4, 23.09],
+            '广州': [113.23, 23.16],
+            '中山': [113.38, 22.52],
+            '深圳': [114.07, 22.62],
+            '珠海': [113.52, 22.3],
+            '苏州': [120.62, 31.32],
+            '南昌': [115.89, 28.68],
+            '成都': [104.06, 30.67],
+            '桂林': [110.28, 25.29],
+            '阳朔': [110.48, 24.78],
+            '龙胜': [110.01, 25.79],
+            '张家界': [110.479191, 29.117096],
+            '重庆': [106.54, 29.59],
+            '杭州': [120.19, 30.26],
+            '常德': [111.69, 29.05],
+            '岳阳': [113.09, 29.37],
+            '长沙': [113, 28.21],
+            '武汉': [114.31, 30.52],
+          	'益阳': [112.3, 28.6],
+            '南京': [118.8, 32],
+        };
+        var map;
+        var zoom = 4;
+        var heatmapOverlay;
+        if (!isSupportCanvas()) {
+            alert('热力图目前只支持有canvas支持的浏览器,您所使用的浏览器不能使用热力图功能~');
+        }
+        var convertData = function (data) {
+            var res = [];
+            for (var i = 0; i < data.length; i++) {
+                var geoCoord = geoCoordMap[data[i].name];
+                if (geoCoord) {
+                    res.push({
+                        name: data[i].name,
+                        lat: geoCoord[1],
+                        lng: geoCoord[0],
+                        count: data[i].value
+                    });
+                }
+            }
+            return res;
+        };
+        var points = convertData(data);
+        function onLoad() {
+            map = new T.Map('mapDiv');
+            map.centerAndZoom(new T.LngLat(108.95, 34.27), zoom);
+
+            //详细的参数,可以查看heatmap.js的文档 https://github.com/pa7/heatmap.js/blob/master/README.md
+            //参数说明如下:
+            /* visible 热力图是否显示,默认为true
+             * opacity 热力的透明度,1-100
+             * radius 势力图的每个点的半径大小
+             * gradient  {JSON} 热力图的渐变区间 . gradient如下所示
+             *	{
+             .2:'rgb(0, 255, 255)',
+             .5:'rgb(0, 110, 255)',
+             .8:'rgb(100, 0, 255)'
+             }
+             value 为颜色值.
+             */
+            heatmapOverlay = new T.HeatmapOverlay({
+                "radius": 30,
+
+            });
+            map.addOverLay(heatmapOverlay);
+            heatmapOverlay.setDataSet({data: points, max: 300});
+        }
+
+        function isSupportCanvas() {
+            var elem = document.createElement('canvas');
+            return !!(elem.getContext && elem.getContext('2d'));
+        }
+        
+        //是否显示热力图
+        function openHeatmap() {
+            heatmapOverlay.show();
+        }
+        
+        function closeHeatmap() {
+            heatmapOverlay.hide();
+        }
+    </script>
+</head>
+<body onLoad="onLoad()">
+<div id="mapDiv"></div>
+<div class="btn">
+    <input type="button" onclick="openHeatmap();" value="显示轨迹热力图">
+    <input type="button" onclick="closeHeatmap();" value="关闭轨迹热力图">
+</div>
+</body>
+</html>

@@ -148,13 +148,9 @@ exports.default = void 0;
 //
 //
 //
-//
-//
 var _default = {
   data: function data() {
-    return {
-      title: 'Hello'
-    };
+    return {};
   },
   onLoad: function onLoad() {},
   methods: {}
