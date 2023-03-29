@@ -69,7 +69,6 @@
             {name: '益阳', value: 250},
             {name: '南京', value: 200},
         ];
-        
         var geoCoordMap = {
             '上海': [121.48, 31.22],
             '厦门': [118.1, 24.46],
@@ -100,6 +99,8 @@
         var map;
         var zoom = 4;
         var heatmapOverlay;
+        //连线
+        var line = null;
         if (!isSupportCanvas()) {
             alert('热力图目前只支持有canvas支持的浏览器,您所使用的浏览器不能使用热力图功能~');
         }
@@ -122,7 +123,48 @@
         function onLoad() {
             map = new T.Map('mapDiv');
             map.centerAndZoom(new T.LngLat(108.95, 34.27), zoom);
-
+            //连线
+            var wire = [];
+                // 深圳
+                wire.push(new T.LngLat(114.07, 22.62));
+                wire.push(new T.LngLat(113.23, 23.16));
+                wire.push(new T.LngLat(114.07, 22.62));
+                wire.push(new T.LngLat(118.1, 24.46));
+                wire.push(new T.LngLat(114.07, 22.62));
+                wire.push(new T.LngLat(104.06, 30.67));
+                wire.push(new T.LngLat(114.07, 22.62));
+                wire.push(new T.LngLat(106.54, 29.59));
+                wire.push(new T.LngLat(114.07, 22.62));
+                wire.push(new T.LngLat(110.28, 25.29));
+                wire.push(new T.LngLat(114.07, 22.62));
+                wire.push(new T.LngLat(116.69, 23.39));
+                wire.push(new T.LngLat(114.07, 22.62));
+                wire.push(new T.LngLat(116.63, 23.68));
+                wire.push(new T.LngLat(114.07, 22.62));
+                // 益阳
+                wire.push(new T.LngLat(112.3, 28.6));
+                wire.push(new T.LngLat(118.8, 32));
+                wire.push(new T.LngLat(112.3, 28.6));
+                wire.push(new T.LngLat(121.48, 31.22));
+                wire.push(new T.LngLat(112.3, 28.6));
+                wire.push(new T.LngLat(113.09, 29.37));
+                wire.push(new T.LngLat(112.3, 28.6));
+                wire.push(new T.LngLat(110.479191, 29.117096));
+                wire.push(new T.LngLat(112.3, 28.6));
+                wire.push(new T.LngLat(111.69, 29.05));
+                wire.push(new T.LngLat(112.3, 28.6));
+                wire.push(new T.LngLat(113.23, 23.16));
+                wire.push(new T.LngLat(112.3, 28.6));
+                wire.push(new T.LngLat(114.07, 22.62));
+                wire.push(new T.LngLat(112.3, 28.6));
+                wire.push(new T.LngLat(113, 28.21));
+                wire.push(new T.LngLat(112.3, 28.6));
+                wire.push(new T.LngLat(114.31, 30.52));
+                wire.push(new T.LngLat(112.3, 28.6));
+                //创建线对象
+                line = new T.Polyline(wire);
+                //向地图上添加线
+                map.addOverLay(line);
             //详细的参数,可以查看heatmap.js的文档 https://github.com/pa7/heatmap.js/blob/master/README.md
             //参数说明如下:
             /* visible 热力图是否显示,默认为true
@@ -138,7 +180,6 @@
              */
             heatmapOverlay = new T.HeatmapOverlay({
                 "radius": 30,
-
             });
             map.addOverLay(heatmapOverlay);
             heatmapOverlay.setDataSet({data: points, max: 300});
